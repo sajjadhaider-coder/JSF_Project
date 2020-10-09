@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsf/core">
+
+<style type="text/css">
+#parent {
+	display: flex;
+	margin-left: 50px;
+}
+
+#sd {
+	display: flex;
+}
+
+#addUser {
+	width: 300px;
+	height: 400px;
+	background-color: #EBEBEB;;
+	padding-left: 50px;
+}
+
+#findDelete {
+	width: 780px;
+	height: 400px;
+	background-color: transparent;
+	padding-left: 50px;
+}
+</style>
+<h:head>
+
+</h:head>
+<h:body>
+	<h1>
+		First Interaction With JSF Was Awesome! Excited! <small
+			style="font-size: 12px;">(Submitted to : Dev. Manager Mr.
+			Syed Zohaib Raza)</small>
+	</h1>
+	<hr />
+	<div id="parent">
+		<div id="findDelete">
+			<h:form name="search" method="post">
+				<h3>You Can View and Delete User Here</h3>
+
+				<!-- table for user searched result -->
+				<p:dataTable value="#{saveData.findUser()}" var="u" border="2">
+
+					<p:column headerText="User ID">
+						<p:cellEditor>
+							<c:facet name="output">
+								<h:outputText value="#{u.uId}" />
+							</c:facet>
+							<c:facet name="input">
+								<p:inputText id="modelInput" value="#{u.uId}" style="width:100%" />
+							</c:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column>
+						<c:facet name="header"> Name</c:facet>
+                    #{u.uName}
+                </p:column>
+					<p:column>
+						<c:facet name="header">Profession</c:facet>
+                    #{u.uProfession}
+            </p:column>
+					<p:column>
+						<c:facet name="header">Salary</c:facet>
+                    #{u.uSalary}
+            </p:column>
+					<p:column>
+						<c:facet name="header">Controlls</c:facet>
+						<div id="sd">
+							<div id="delete">
+								<p:commandButton id="uDeleteId"
+									actionListener="#{saveData.deleteUser(u)}" update="growl"
+									value="delete">
+									<p:confirm header="Confirmation"
+										message="Are you sure to delete #{u.uName} with User ID #{u.uId}?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+							</div>
+							<div id="search">
+								<h:commandButton id="search" value="edit"
+									action="#{saveData.populateInputTextForUpdate(u)}"></h:commandButton>
+							</div>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</div>
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+		</div>
+		<div id="addUser">
+			<h3>Add and Update User Details Here</h3>
+			<h:form name="save" method="post" action="Contoller">
+				<h:outputLabel>User ID</h:outputLabel>
+				<br />
+				<h:inputText placeholder="" size="30" id="userId"
+					value="#{saveData.selectedEmployee.uId}"></h:inputText>
+
+				<br />
+				<br />
+
+				<h:outputLabel>User Name</h:outputLabel>
+				<br />
+				<h:inputText id="userName" size="30"
+					value="#{saveData.selectedEmployee.uName}"></h:inputText>
+
+				<br />
+				<br />
+
+
+				<h:outputLabel>Profession</h:outputLabel>
+				<br />
+				<h:inputText id="profession" size="30"
+					value="#{saveData.selectedEmployee.uProfession}"></h:inputText>
+
+				<br />
+				<br />
+
+				<h:outputLabel>Salary</h:outputLabel>
+				<br />
+				<h:inputText id="salary" size="30"
+					value="#{saveData.selectedEmployee.uSalary}"></h:inputText>
+				<br />
+				<br></br>
+				<h:commandButton id="save" value="Save"
+					action="#{saveData.saveUser()}"></h:commandButton>
+
+				<h:commandButton id="update" value="update"
+					action="#{saveData.updateUser()}" />
+
+				<h:commandButton id="reset" value="reset"
+					action="#{saveData.resetForm()}" />
+
+				<br/><br/>
+				
+				<h:message for="save" />
+			</h:form>
+		</div>
+		<p:growl id="growl" showDetail="true" sticky="true"></p:growl>
+	</div>
+
+</h:body>
+</html>
